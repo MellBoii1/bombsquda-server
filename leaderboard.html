@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BombSquda Leaderboard</title>
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+    <meta content="BombSquda Leaderboard" property="og:title"/>
+	<meta name="twitter:card" content="summary_large_image">
+    <style>
+        body {
+            background:	#103211;
+            color: #98d09f;
+            font-family: Hobo, Hobo;
+			background-image: url('static/background.png');
+			background-size: cover;
+            text-align: center;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #d0f7d1;
+        }
+
+        .box {
+            background: #103211;
+            padding: 20px;
+            border-radius: 12px;
+            width: 500px;
+            margin: auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .entry:last-child {
+            border-bottom: none;
+        }
+
+        .time {
+            color: #98d09f;
+        }
+    </style>
+</head>
+<body>
+    <h1>BombSquda Speedrun Leaderboard</h1>
+	<h3>This is the leaderboard for players' best times in co-op levels!</h3>
+	<h3>If you wish to participate, you can do so by enabling</h3>
+	<h3>'speedrun timer in coop levels' on the config.</h3>
+	<h3>Don't know what BombSquda is? <a href="https://github.com/MellBoii1/bombsquda"target="_blank">Click here</a> to find out more!</h3>
+
+    <div class="box" id="board">
+        Loading...
+    </div>
+
+	<script>
+	fetch("/get/all")
+		.then(r => r.json())
+		.then(data => {
+			const board = document.getElementById("board");
+			board.innerHTML = "";
+
+			for (const level in data) {
+				const h2 = document.createElement("h2");
+				h2.textContent = prettifyLevelName(level);
+				board.appendChild(h2);
+
+				const entries = data[level];
+
+				const sorted = Object.entries(entries)
+					.sort((a, b) => a[1] - b[1]);
+
+				for (const [player, time] of sorted) {
+					const row = document.createElement("div");
+					row.className = "entry";
+
+					row.innerHTML = `
+						<span>${player}</span>
+						<span class="time">${formatTime(time)}</span>
+					`;
+
+					board.appendChild(row);
+				}
+			}
+		});
+
+	function formatTime(t) {
+		const m = Math.floor(t / 60);
+		const s = Math.floor(t % 60);
+		const ms = Math.floor((t - Math.floor(t)) * 1000);
+		return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}:${ms.toString().padStart(3, '0')}`;
+	}
+	function prettifyLevelName(raw) {
+    return raw
+        .replace(/^Default:/, "Hard: ") // replace Default with Hard
+        .replace(/^Easy:/, "Easy: ") // replace Easy with... easy i guess
+        .replace(/_squdaPB$/, ""); 
+	}
+	</script>
+</body>
+</html>
