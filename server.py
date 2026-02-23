@@ -41,6 +41,10 @@ def cleanup_offline_clients(runtime):
 def clean_display_name(s: str) -> str:
     return "".join(c for c in s if not (0xE000 <= ord(c) <= 0xF8FF)).strip()
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return send_from_directory(".", "not_found.html"), 404
+
 @app.route("/leaderboard")
 def leaderboard():
     return send_from_directory(".", "leaderboard.html")
@@ -67,7 +71,11 @@ def load_runtime():
 def save_runtime(data):
     with open(RUNTIME_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
-        
+
+@app.route("/about")
+def about():
+    return send_from_directory(".", "about.html")
+
 @app.route("/online", methods=["GET"])
 def get_online_players():
     runtime = load_runtime()
@@ -87,7 +95,9 @@ def ping():
         "last_seen": time.time(),
         "account": data.get("account"),
         "device_id": data.get("device_id"),
-        "client_version": data.get("client_version"),
+        "bs_version": data.get("client_version"),
+        "squda_version": data.get("squda_version"),
+        "squda_updatedate": data.get("squda_updatedate"),
     }
     cleanup_offline_clients(runtime)
     save_runtime(runtime)

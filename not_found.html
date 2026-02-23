@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BombSquda</title>
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+    <meta content="BombSquda: Mell's stupid Modpack" property="og:title"/>
+	<meta name="twitter:card" content="summary_large_image">
+    <style>	
+		@font-face {
+			font-family: 'bombsquad';
+			src: url('static/hobo.ttf') format('truetype');
+			font-weight: light;
+			font-style: normal;
+		}
+		.a2 {
+			/* Set display to inline-block so transform works */
+			display: inline-block; 
+			
+			/* Smooths the scaling effect */
+			transition: transform 0.2s ease-in-out; 
+			
+			/* Optional: additional styling */
+			padding: 10px 15px;
+			color: #000;
+			text-decoration: none;
+		}
+		/* unvisited link */
+		.a2:link {
+		  color: rgba(155, 25, 25);
+		  background-color: transparent;
+		  text-decoration: none; /* optional: removes underline */
+		}
+
+		/* visited link */
+		.a2:visited {
+		  color: rgba(155, 25, 25);
+		  background-color: transparent;
+		  text-decoration: none;
+		}
+
+		/* mouse over link */
+		.a2:hover {
+		  color: rgba(50, 100, 50);
+		  background-color: transparent;
+		  text-decoration: none; /* optional: adds underline on hover */
+		  transform: scale(1.1);
+		}
+
+		/* selected link */
+		.a2:active {
+		  color: lime;
+		  background-color: transparent;
+		  text-decoration: none;
+		  transform: scale(1.4);
+		  transition: transform 0.1s ease-in-out; 
+		}
+        body {
+            background:	#000000;
+            color: rgba(155, 25, 25);
+            font-family: 'bombsquad', sans-serif;
+            text-align: center;
+            padding: 40px;
+			scrollbar-color: red orange;
+			scrollbar-width: thin;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.5); 
+            padding: 20px;
+            border-radius: 12px;
+            width: 500px;
+            margin: auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        .myButton:hover {
+            transform: scale(1.1);
+        }
+    </style>
+    <body>
+		<h2><a href="/" class="a2"><- Go Back</a></h2>
+		<h1>Page not Found</h1>
+		<h2>Couldn't find the specified page.</h2>
+    </body>
+</head>
+</html>

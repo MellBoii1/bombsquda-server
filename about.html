@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <title>BombSquda</title>
     <link rel="icon" type="image/x-icon" href="static/favicon.ico">
     <meta content="BombSquda: Mell's stupid Modpack" property="og:title"/>
 	<meta name="twitter:card" content="summary_large_image">
     <style>	
-		@font-face {
-			font-family: 'bombsquad';
-			src: url('static/hobo.ttf') format('truetype');
-			font-weight: light;
-			font-style: normal;
-		}
 		.a2 {
 			/* Set display to inline-block so transform works */
 			display: inline-block; 
@@ -54,10 +51,27 @@
 		  transform: scale(1.4);
 		  transition: transform 0.1s ease-in-out; 
 		}
+		/* unvisited link */
+		a:link {
+		  color: lime;
+		  background-color: transparent;
+		  text-decoration: none;
+		}
+		a:hover {
+		  color: lime;
+		  background-color: transparent;
+		  text-decoration: underline;
+		  transform: scale(1.1);
+		}
+		a:visited {
+		  color: green;
+		  background-color: transparent;
+		  text-decoration: none;
+		}
         body {
             background:	#ada993;
             color: #ffffff;
-            font-family: 'bombsquad', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-image: url('static/snescourse_blur.png');
             background-size: cover;
             text-align: center;
@@ -100,48 +114,28 @@
         }
     </style>
     <body>
-        <img src="static/squda_title.png" alt="Title of the modpack">
-        <p></p>
-        <div class="container">
-			<a href="leaderboard" class="a2">Leaderboard</a>
-			<a href="about" class="a2">About</a>
-			<a href="bot" class="a2">SpazBot</a>
-            <h1>BombSquda: Mell's Modpack</h1>
-            <h2>
-                BombSquda is a modpack for BombSquad that may 
-				or may not be rage inducing, but also incredibly funny.
-            </h2>
-            <h3>
-				It introduces 3 maps, a assortment of powerups that do special things,
-				various characters from other media and some made manually and including 
-				characters with special movesets or abillities, various changes
-				that make the gameplay different, a whole upcoming co-op campaign story,
-				sounds that are sure to destroy your ears, and Mell!
-            </h3>
-			<h3>All</h3>
-			<h3>within</h3>
-			<h2>A</h2>
-			<h2>SINGLE</h2>
-			<h1>PACK!</h1>
+		<h2><a href="/" class="a2"><- Go Back</a></h2>
+		<h1>About Me</h1>
+		<div class="container">
+			<img src="static/mell.gif" alt="its him">
 			<h2>
-				So why not download it? Click the button below! 
-				It's pretty good, I promise!
-            </h2>
-            <a href="https://github.com/MellBoii1/bombsquda/archive/refs/heads/main.zip">
-            <button type="button" class="myButton">
-                download it!
-            </button></a>
-            <h2>Screenshots</h2>
-            <img src="static/screenshot1.png" alt="Screenshot">
-            <p></p>
-            <img src="static/screenshot2.png" alt="Screenshot">
-            <p></p>
-            <img src="static/screenshot3.png" alt="Screenshot">
-			<p></p>
-            <img src="static/screenshot4.png" alt="Screenshot">
-			<p></p>
-            <img src="static/screenshot5.png" alt="Screenshot">
-        </div>
+				Hello, I'm Mell! Sometimes also known as @mellboii. I assume you know me, 
+				or atleast a bit about my modpack, since you wandered into here.
+				If not, that's fine! I like making media about other media I like, 
+				if it wasn't obvious.
+			</h2>
+			<h2>
+				I also like playing a lot of games, like Mario Kart 7,
+				New Super Mario Bros. Wii, EarthBound, BombSquad, Rivals of Aether,
+				Pizza Tower, AntonBlast, and whatnot.
+			</h2>
+			<h2>
+				You can contact me through various ways:<br>
+				E-mail: <a href="mailto:mellboii@tutamail.com">mellboii@tutamail.com</a><br>
+				Discord: <a href="discord://-/users/1078788946609324175">@mellboii</a><br>
+				Github: <a href="https://github.com/MellBoii1">@MellBoii1</a><br>
+			</h2>
+		</div>
     </body>
 </head>
 </html>

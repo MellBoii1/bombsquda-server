@@ -14,7 +14,50 @@
             text-align: center;
             padding: 40px;
         }
+		
+		.a2 {
+			/* Set display to inline-block so transform works */
+			display: inline-block; 
+			
+			/* Smooths the scaling effect */
+			transition: transform 0.2s ease-in-out; 
+			
+			/* Optional: additional styling */
+			padding: 10px 15px;
+			color: #000;
+			text-decoration: none;
+		}
+		/* unvisited link */
+		.a2:link {
+		  color: white;
+		  background-color: transparent;
+		  text-decoration: none; /* optional: removes underline */
+		}
 
+		/* visited link */
+		.a2:visited {
+		  color: white;
+		  background-color: transparent;
+		  text-decoration: none;
+		}
+
+		/* mouse over link */
+		.a2:hover {
+		  color: lavender;
+		  background-color: transparent;
+		  text-decoration: none; /* optional: adds underline on hover */
+		  transform: scale(1.1);
+		}
+
+		/* selected link */
+		.a2:active {
+		  color: #d7c2f2;
+		  background-color: transparent;
+		  text-decoration: none;
+		  transform: scale(1.4);
+		  transition: transform 0.1s ease-in-out; 
+		}
+		
         h1 {
             color: #a55cff;
         }
@@ -53,6 +96,7 @@
 </head>
 <body>
 	<div class="box">
+		<h2><a href="/" class="a2"><- Go Back</a></h2>
 		<img src="static/spazbot.png" alt="A image of SpazBot's character; Spazling.">
 		<h1>---------------- SpazBot ----------------</h1>
 		<h4>Ever wanted to check stuff related to BombSquda,</h4>

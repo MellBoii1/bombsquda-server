@@ -1,0 +1,51 @@
+<head>
+	<style>
+		@font-face {
+			font-family: 'bombsquad';
+			src: url('static/hobo.ttf') format('truetype');
+			font-weight: light;
+			font-style: normal;
+		}
+		.a2 {
+			/* Set display to inline-block so transform works */
+			display: inline-block; 
+			
+			/* Smooths the scaling effect */
+			transition: transform 0.3s ease-in-out; 
+			
+			/* Optional: additional styling */
+			padding: 10px 15px;
+			color: #000;
+			text-decoration: none;
+		}
+		/* unvisited link */
+		.a2:link {
+		  color: lime;
+		  background-color: transparent;
+		  text-decoration: none; /* optional: removes underline */
+		}
+
+		/* visited link */
+		.a2:visited {
+		  color: white;
+		  background-color: transparent;
+		  text-decoration: none;
+		}
+
+		/* mouse over link */
+		.a2:hover {
+		  color: green;
+		  background-color: transparent;
+		  text-decoration: underline; /* optional: adds underline on hover */
+		  transform: scale(1.1);
+		}
+
+		/* selected link */
+		.a2:active {
+		  color: green;
+		  background-color: transparent;
+		  text-decoration: underline;
+		  transform: scale(1.1);
+		}
+	</style>
+</head>

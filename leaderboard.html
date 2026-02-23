@@ -6,10 +6,58 @@
     <meta content="BombSquda Leaderboard" property="og:title"/>
 	<meta name="twitter:card" content="summary_large_image">
     <style>
+		.a2 {
+			/* Set display to inline-block so transform works */
+			display: inline-block; 
+			
+			/* Smooths the scaling effect */
+			transition: transform 0.2s ease-in-out; 
+			
+			/* Optional: additional styling */
+			padding: 10px 15px;
+			color: #000;
+			text-decoration: none;
+		}
+		/* unvisited link */
+		.a2:link {
+		  color: white;
+		  background-color: transparent;
+		  text-decoration: none; /* optional: removes underline */
+		}
+
+		/* visited link */
+		.a2:visited {
+		  color: white;
+		  background-color: transparent;
+		  text-decoration: none;
+		}
+
+		/* mouse over link */
+		.a2:hover {
+		  color: green;
+		  background-color: transparent;
+		  text-decoration: none; /* optional: adds underline on hover */
+		  transform: scale(1.1);
+		}
+
+		/* selected link */
+		.a2:active {
+		  color: lime;
+		  background-color: transparent;
+		  text-decoration: none;
+		  transform: scale(1.4);
+		  transition: transform 0.1s ease-in-out; 
+		}
+		@font-face {
+			font-family: 'bombsquad';
+			src: url('static/hobo.ttf') format('truetype');
+			font-weight: light;
+			font-style: normal;
+		}
         body {
             background:	#103211;
             color: #98d09f;
-            font-family: Hobo, Hobo;
+            font-family: 'bombsquad', sans-serif;
 			background-image: url('static/background.png');
 			background-size: cover;
             text-align: center;
@@ -46,11 +94,9 @@
     </style>
 </head>
 <body>
-    <h1>BombSquda Speedrun Leaderboard</h1>
-	<h3>This is the leaderboard for players' best times in co-op levels!</h3>
-	<h3>If you wish to participate, you can do so by enabling</h3>
-	<h3>'speedrun timer in coop levels' on the config.</h3>
-	<h3>Don't know what BombSquda is? <a href="https://github.com/MellBoii1/bombsquda"target="_blank">Click here</a> to find out more!</h3>
+	<h2><a href="/" class="a2"><- Go Back</a></h2>
+    <h1>Speedrun Leaderboard</h1>
+	<h2>This is the leaderboard for players' best times in co-op levels!</h2>
 
     <div class="box" id="board">
         Loading...
