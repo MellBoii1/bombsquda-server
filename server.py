@@ -15,8 +15,7 @@ app = Flask(__name__)
 DATA_FILE = "leaderboard.json"
 port = int(os.environ.get("PORT", 5000))
 ONLINE_TIMEOUT = 10  # seconds without ping = offline
-ADMIN_KEY = "just_lemme_fuckin_edit_stuff_already" # i know this looks risky (and profane), but who would even guess this? 
-                                                   # plus, if you're better at making passwords then make one i guess
+ADMIN_KEY = "just_lemme_fuckin_edit_stuff_already" 
 RUNTIME_FILE = "runtime.json"
 def load_data():
     if not os.path.exists(DATA_FILE):
