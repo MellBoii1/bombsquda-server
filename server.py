@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 DATA_FILE = "leaderboard.json"
 port = int(os.environ.get("PORT", 5000))
-ONLINE_TIMEOUT = 10  # seconds without ping = offline
+ONLINE_TIMEOUT = 10
 ADMIN_KEY = "just_lemme_fuckin_edit_stuff_already" 
 RUNTIME_FILE = "runtime.json"
 def load_data():
@@ -92,16 +92,71 @@ def ping():
     runtime.setdefault("online_clients", {})
     runtime["online_clients"][bs_id] = {
         "last_seen": time.time(),
-        "account": data.get("account"),
-        "device_id": data.get("device_id"),
-        "bs_version": data.get("client_version"),
-        "squda_version": data.get("squda_version"),
-        "squda_updatedate": data.get("squda_updatedate"),
+        "account": data.get("account", None),
+        "device_id": data.get("device_id", None),
+        "bs_version": data.get("client_version", None),
+        "squda_version": data.get("squda_version", 0.0),
+        "squda_updatedate": data.get("squda_updatedate", '00/00/2000'),
     }
     cleanup_offline_clients(runtime)
     save_runtime(runtime)
 
     return {"ok": True}
+
+@app.route("/sendcur", methods=["POST"])
+def sendcur():
+    data = request.json
+    subkey = data.get('type', 'tickets')
+    key = f"saved_{subkey}"
+    runtime = load_runtime()
+    bs_id = data["bs_id"]
+    runtime.setdefault(key, {})
+    runtime[key][bs_id] = runtime[key].get(bs_id, 0) + data.get('amount')
+    save_runtime(runtime)
+
+    return jsonify(
+        {
+            "ok": True, 
+            "amount": data.get('amount'), 
+            "new_bal": runtime[key].get(bs_id, 0)
+        }
+    )
+
+@app.route("/withdrawcur", methods=["POST"])
+def withdrawcur():
+    data = request.json
+    subkey = data.get('type', 'tickets')
+    key = f"saved_{subkey}"
+    runtime = load_runtime()
+    bs_id = data["bs_id"]
+    runtime.setdefault(key, {})
+    runtime[key][bs_id] = runtime[key].get(bs_id, 0) - data.get('amount')
+    save_runtime(runtime)
+
+    return jsonify(
+        {
+            "ok": True, 
+            "amount": data.get('amount'), 
+            "new_bal": runtime[key].get(bs_id, 0)
+        }
+    )
+
+@app.route("/getcur", methods=["POST"])
+def getcur():
+    data = request.json
+    subkey = data.get('type', 'tickets')
+    key = f"saved_{subkey}"
+    runtime = load_runtime()
+    bs_id = data["bs_id"]
+    runtime.setdefault(key, {})
+    save_runtime(runtime)
+    return jsonify(
+        {
+            "ok": True, 
+            "amount": runtime[key].get(bs_id, 0)
+        }
+    )
+
 
 @app.route("/friends/request", methods=["POST"])
 def send_friend_request():
@@ -188,88 +243,6 @@ def send_command():
     save_runtime(runtime)
 
     return {"queued": True}
-
-@app.route("/admin/leaderboard", methods=["GET", "POST"])
-def admin_leaderboard():
-    if request.args.get("key") != ADMIN_KEY:
-        abort(403)
-
-    data = load_data()
-
-    if request.method == "POST":
-        level = request.form["level"]
-        player = request.form["player"]
-        time = float(request.form["time"])
-
-        if level not in data:
-            data[level] = {}
-
-        data[level][player] = time
-        save_data(data)
-    print('warning: a request was successfully sent to access the admin panel. Was it you?')
-    return render_template_string("""
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Leaderboard Admin</title>
-    <style>
-        body { background:#0e1a12; color:#c7f7d4; font-family:Arial; padding:40px; }
-        h1 { text-align:center; }
-        .box { max-width:600px; margin:auto; background:#12261a; padding:20px; border-radius:12px; }
-        input, button { padding:8px; margin:5px; }
-        table { width:100%; margin-top:20px; }
-        td, th { padding:6px; }
-        .delete { color:#ff6666; cursor:pointer; }
-    </style>
-</head>
-<body>
-<div class="box">
-<h1>Admin Panel</h1>
-
-<form method="post">
-    <input name="level" placeholder="Level key" required>
-    <input name="player" placeholder="Player name" required>
-    <input name="time" placeholder="Time (seconds)" required>
-    <button>Add / Update</button>
-</form>
-
-<table>
-<tr><th>Level</th><th>Player</th><th>Time</th><th></th></tr>
-{% for level, players in data.items() %}
-    {% for player, time in players.items() %}
-    <tr>
-        <td>{{level}}</td>
-        <td>{{player}}</td>
-        <td>{{"%.3f"|format(time)}}</td>
-        <td>
-            <a class="delete" href="/admin/delete?key={{key}}&level={{level}}&player={{player}}">Delete</a>
-        </td>
-    </tr>
-    {% endfor %}
-{% endfor %}
-</table>
-</div>
-</body>
-</html>
-""", data=data, key=ADMIN_KEY)
-
-@app.route("/admin/delete")
-def admin_delete():
-    if request.args.get("key") != ADMIN_KEY:
-        abort(403)
-
-    level = request.args["level"]
-    player = request.args["player"]
-
-    data = load_data()
-
-    if level in data and player in data[level]:
-        del data[level][player]
-        if not data[level]:
-            del data[level]
-        save_data(data)
-    print(f'warning: a request was successfully sent to delete {player}\'s progress. Was it you?')
-    return "Deleted. <a href='/admin/leaderboard?key=" + ADMIN_KEY + "'>Back</a>"
 
 @app.route("/submit", methods=["POST"])
 def submit():
