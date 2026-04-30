@@ -22,7 +22,7 @@
 		.a2:link {
 		  color: white;
 		  background-color: transparent;
-		  text-decoration: none; /* optional: removes underline */
+		  text-decoration: none;
 		}
 
 		/* visited link */
@@ -34,7 +34,7 @@
 
 		/* mouse over link */
 		.a2:hover {
-		  color: green;
+		  color: blue;
 		  background-color: transparent;
 		  text-decoration: none; /* optional: adds underline on hover */
 		  transform: scale(1.1);
@@ -42,7 +42,7 @@
 
 		/* selected link */
 		.a2:active {
-		  color: lime;
+		  color: cyan;
 		  background-color: transparent;
 		  text-decoration: none;
 		  transform: scale(1.4);
@@ -55,21 +55,20 @@
 			font-style: normal;
 		}
         body {
-            background:	#103211;
-            color: #98d09f;
-            font-family: 'bombsquad', sans-serif;
-			background-image: url('static/background.png');
+            color: #ccc4ff;
+            font-family: sans-serif;
+			background-image: url('static/earth.png');
 			background-size: cover;
             text-align: center;
             padding: 40px;
         }
 
         h1 {
-            color: #d0f7d1;
+            color: #ada1ff;
         }
 
         .box {
-            background: #103211;
+            background: #232f73;
             padding: 20px;
             border-radius: 12px;
             width: 500px;
@@ -95,8 +94,9 @@
 </head>
 <body>
 	<h2><a href="/" class="a2"><- Go Back</a></h2>
-    <h1>Speedrun Leaderboard</h1>
-	<h2>This is the leaderboard for players' best times in co-op levels!</h2>
+    <h1>Leaderboard</h1>
+	<h3>A leaderboard for various statistics of players.</h3>
+	<h3>These include things like times in coop levels, and amount of currency.</h3>
 
     <div class="box" id="board">
         Loading...

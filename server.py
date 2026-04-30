@@ -4,18 +4,25 @@ from flask import (
     jsonify, 
     abort, 
     send_from_directory,
-    render_template_string
+    render_template_string,
+    make_response,
+    render_template,
+    redirect,
+    url_for,
+    session
 )
 import json
 import os, sys
 import time
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 DATA_FILE = "leaderboard.json"
 port = int(os.environ.get("PORT", 5000))
 ONLINE_TIMEOUT = 10
-ADMIN_KEY = "just_lemme_fuckin_edit_stuff_already" 
 RUNTIME_FILE = "runtime.json"
 def load_data():
     if not os.path.exists(DATA_FILE):
@@ -43,6 +50,10 @@ def clean_display_name(s: str) -> str:
 @app.errorhandler(404)
 def page_not_found(error):
     return send_from_directory(".", "not_found.html"), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return send_from_directory(".", "internal_error.html"), 500
 
 @app.route("/leaderboard")
 def leaderboard():
@@ -75,6 +86,57 @@ def save_runtime(data):
 def about():
     return send_from_directory(".", "about.html")
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    error = None
+    username = ""
+    runtime = load_runtime()
+    correct_user = None
+    correct_pass = None
+
+    if session.get('squda_id'):
+        return redirect(url_for('acc_settings'))
+
+    if request.method == "POST":
+        username = request.form.get("user", "")
+        password = request.form.get("pass", "")
+
+        if username == "":
+            error = "Username is required."
+
+        elif password == "":
+            error = "Password is required."
+
+        info = runtime.get('user_info')
+        for sqid in list( info.keys() ):
+            # get user by ID
+            if username == sqid:
+                correct_pass = info[sqid].get('password')
+                correct_user = sqid
+                break
+            # otherwise try getting by username
+            elif username == info[sqid]['username']:
+                correct_pass = info[sqid].get('password')
+                correct_user = sqid
+                break
+            else:
+                pass
+        
+        # if there is a correct user, 
+        # but no password,
+        # make it our new one
+        if correct_user and not correct_pass:
+            runtime.get(correct_user)['password'] = password
+            save_runtime(runtime)
+                
+        if not correct_user or password != correct_pass:
+            error = "Invalid username or password."
+        else:
+            session['squda_id'] = correct_user
+            return redirect(url_for('acc_settings'))
+
+    return render_template("login.html", error=error, user=username)
+
 @app.route("/online", methods=["GET"])
 def get_online_players():
     runtime = load_runtime()
@@ -82,6 +144,22 @@ def get_online_players():
     save_runtime(runtime)
 
     return jsonify(runtime.get("online_clients", {}))
+
+@app.route("/acc_settings")
+def acc_settings():
+    runtime = load_runtime()
+    squda_id = session.get('squda_id')
+    # ew
+    runtime_info = runtime.get('user_info')
+    user_info = runtime_info.get(squda_id, {})
+    username = user_info.get('username')
+    if not username:
+        username = squda_id
+    
+    if not squda_id:
+        return "You aren't logged in!"
+    return render_template("acc_settings.html", id=squda_id, username=username)
+    
     
 @app.route("/ping", methods=["POST"])
 def ping():
@@ -217,21 +295,6 @@ def get_friends():
         "friends": runtime.get("friends", {}).get(user, []),
         "requests": runtime.get("friend_requests", {}).get(user, [])
     })
-
-@app.route("/get_commands", methods=["POST"])
-def get_commands():
-    data = request.get_json(silent=True) or {}
-    bs_id = data.get("bs_id")
-
-    if not bs_id:
-        return jsonify([])
-
-    runtime = load_runtime()
-    cmds = runtime.get("commands", {}).pop(bs_id, [])
-    cleanup_offline_clients(runtime)
-    save_runtime(runtime)
-
-    return jsonify(cmds)
 
 @app.route("/send_command", methods=["POST"])
 def send_command():
