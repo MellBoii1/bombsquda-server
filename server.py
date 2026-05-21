@@ -320,6 +320,38 @@ def send_friend_request():
 
     return jsonify({"status": "sent"})
 
+@app.route("/friends/remove", methods=["POST"])
+def remove_friend():
+    data = request.get_json(silent=True) or {}
+
+    user = resolve_user_id(data.get("user", ""))
+    target = resolve_user_id(data.get("target", ""))
+
+    if not user or not target:
+        return jsonify({"error": "invalid_user"})
+
+    if user == target:
+        return jsonify({"error": "cannot_friend_self"})
+
+    runtime = load_runtime()
+
+    runtime.setdefault("friends", {})
+
+    # Not friends
+    if not are_friends(runtime, user, target):
+        return jsonify({"status": "not_friends"})
+
+    # Create request list
+    friends = runtime.get('friends', {}).get(user)
+
+    # Avoid duplicates
+    if target in friends:
+        friends.remove(target)
+
+    save_runtime(runtime)
+
+    return jsonify({"status": "done"})
+
 @app.route("/friends/respond", methods=["POST"])
 def respond_friend_request():
     data = request.get_json(silent=True) or {}
@@ -444,7 +476,7 @@ def get_info():
     id = data.get('id')
     runtime = load_runtime()
     info = runtime.get("user_info", {})
-    thisinfo = info.get(id)
+    thisinfo = info.get(id, {})
     return jsonify(thisinfo)
 
 @app.route("/submit", methods=["POST"])
